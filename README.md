@@ -1,0 +1,1 @@
+A server for the [FlapMMO](http://flapmmo.com/), written in C++ using [libwebsock](https://github.com/payden/libwebsock). It's *not* the original server - this one is written from scratch and it's based on the javascript client.
