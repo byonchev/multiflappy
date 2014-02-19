@@ -50,9 +50,7 @@ int FlappyServer::connect_callback(libwebsock_client_state *state)
 
 	instance->send_message(state, Message().add_byte(MESSAGE_PLAYER).add_4byte(state->sockfd));
 
-	instance->players_mutex.lock();
 	instance->players[state->sockfd] = Player();
-	instance->players_mutex.unlock();
 
 	return 0;
 }
@@ -92,7 +90,6 @@ int FlappyServer::receive_callback(libwebsock_client_state *state, libwebsock_me
 
 		case MESSAGE_UPDATES:
 		{
-			instance->players_mutex.lock();
 			int jumps_count = *(reinterpret_cast<unsigned short*>(message->payload+1));
 			vector<unsigned short> jumps;
 		
@@ -102,7 +99,6 @@ int FlappyServer::receive_callback(libwebsock_client_state *state, libwebsock_me
 			}
 
 			instance->jump_updates[state->sockfd] = jumps;
-			instance->players_mutex.unlock();
 			break;
 		}
 	}
@@ -180,8 +176,6 @@ void FlappyServer::send_updates()
 	{
 		if (jump_updates.size() > 0)
 		{
-			players_mutex.lock();
-
 			Message update_message;
 			update_message.add_byte(MESSAGE_UPDATES);
 			update_message.add_4byte(players.size() - disconnected_players.size());
@@ -208,7 +202,8 @@ void FlappyServer::send_updates()
 
 			send_message(NULL, update_message);
 
-			jump_updates.clear();
+			players_mutex.lock();
+			
 			remove_disconnected_players();
 
 			players_mutex.unlock();
