@@ -178,7 +178,7 @@ void FlappyServer::send_updates()
 		{
 			Message update_message;
 			update_message.add_byte(MESSAGE_UPDATES);
-			update_message.add_4byte(players.size() - disconnected_players.size());
+			update_message.add_4byte(players.size());
 			update_message.add_4byte(jump_updates.size());				
 
 
