@@ -8,10 +8,10 @@ EXECUTABLE=server
 all: $(SOURCES) $(EXECUTABLE)
 	
 $(EXECUTABLE): $(OBJECTS) 
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) $(LDFLAGS) -o bin/$@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -rf src/*o server
+	rm -rf *o bin/server
