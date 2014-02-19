@@ -48,8 +48,6 @@ int FlappyServer::connect_callback(libwebsock_client_state *state)
 
 	instance->send_message(state, instance->pipes_message);
 
-	instance->send_message(state, Message().add_byte(MESSAGE_PLAYER).add_4byte(state->sockfd));
-
 	instance->players[state->sockfd] = Player();
 
 	return 0;
@@ -84,6 +82,7 @@ int FlappyServer::receive_callback(libwebsock_client_state *state, libwebsock_me
 		case MESSAGE_NICKNAME_UPDATE:
 		{
 			player.set_nickname(string(message->payload+1));
+			instance->send_message(state, Message().add_byte(MESSAGE_PLAYER).add_4byte(state->sockfd));			
 
 			break;
 		}
